@@ -1,6 +1,7 @@
 package com.androvaid.guitorio.to_letbd.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androvaid.guitorio.to_letbd.R;
+import com.androvaid.guitorio.to_letbd.activity.PropertyDetailActivity;
 import com.androvaid.guitorio.to_letbd.model.posts.Posts;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -53,7 +55,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         Picasso.get()
                 .load("http://to-let.androvaid.com/"+post.getFeaturedPhoto())
                 //.load("http://to-let.androvaid.com/assets/user/lake.jpg")
-                .placeholder(R.drawable.lake)
+                //.load("http://to-let.androvaid.com/assets/user/hriday.jpg")
                 .error(R.drawable.lake)
                 .into(holder.map_preview_box_listing_image);
         /*Glide.with(context)
@@ -66,6 +68,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             public void onClick(View v) {
                 Log.d(TAG, "onClick: title: "+post.getTitle());
                 Log.d(TAG, "onClick: Image: "+post.getFeaturedPhoto());
+
+                PropertyDetailActivity propertyDetailActivity = new PropertyDetailActivity();
+                propertyDetailActivity.passPostId(post.getId());
+
+                context.startActivity(new Intent(context,PropertyDetailActivity.class));
+
             }
         });
 
