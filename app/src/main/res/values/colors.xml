@@ -88,4 +88,9 @@
 
     <color name="transparent_black_50_percent">#80000000</color>
 
+
+    <color name="spinner_base_color">#44000000</color>
+    <color name="spinner_hint_text_color">#ffffff</color>
+    <!--<color name="spinner_hint_text_color">#ffffcc</color>-->
+
 </resources>

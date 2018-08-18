@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_favorite_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +33,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_fab" />
+                                      <entry key="imageAsset" value="D:\Education\Android\Projects\DemoProjects\To-LetBD\app\src\main\res\drawable-xxhdpi\ic_listing_to_hide.png" />
+                                      <entry key="outputName" value="img_search" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="f9f9f9" />
+                                      <entry key="themeColor" value="d64c22" />
                                     </map>
                                   </option>
                                 </PersistentState>

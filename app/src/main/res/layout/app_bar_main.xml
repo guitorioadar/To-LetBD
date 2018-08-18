@@ -27,9 +27,12 @@
                 android:drawablePadding="5dp"
                 android:padding="10dp"
                 android:textColor="#000"
+                android:textSize="14sp"
+                android:autoSizeMinTextSize="12sp"
                 android:hint="Search for places"
                 android:textColorHint="#70000000"
-                android:background="@drawable/search_et_white_border"/>
+                android:background="@drawable/search_et_white_border"
+                tools:targetApi="o" />
 
         </android.support.v7.widget.Toolbar>
 

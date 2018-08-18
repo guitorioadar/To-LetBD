@@ -20,7 +20,8 @@
             android:maxLines="1"
             android:textColor="#000"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:hint="Title"/>
 
         <TextView
             android:id="@+id/snippet"
@@ -29,7 +30,8 @@
             android:ellipsize="end"
             android:maxLines="10"
             android:textColor="#000"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:hint="Snippet"/>
     </LinearLayout>
 
 </LinearLayout>

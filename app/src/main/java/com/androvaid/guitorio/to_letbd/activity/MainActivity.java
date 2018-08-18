@@ -71,6 +71,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final int PLACE_PICKER_REQUEST = 1;
+    private static final float DEFAULT_ZOOM = 15f;
 
 
     private static final String TAG = "MainActivity";
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
+    private Marker mMarker;
 
     private PlaceInfo mPlace;
 
@@ -224,21 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        //mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
-
-        if(!title.equals("My Location")){
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(title);
-            mMap.addMarker(options);
-        }
-
-        new Utility(MainActivity.this).hideSoftkeyboard();
-    }
 
 
     /*
@@ -449,6 +438,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
             hideSoftKeyboard();
 
             final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);
@@ -495,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             moveCamera(new LatLng(place.getViewport().getCenter().latitude,
-                    place.getViewport().getCenter().longitude), 15f, mPlace.toString());
+                    place.getViewport().getCenter().longitude), DEFAULT_ZOOM, mPlace);
 
             places.release();
         }
@@ -511,6 +501,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
             }
         }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom, String title){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        //mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
+
+        if(!title.equals("My Location")){
+            MarkerOptions options = new MarkerOptions()
+                    .position(latLng)
+                    .title(title);
+            mMap.addMarker(options);
+        }
+
+        hideSoftKeyboard();
+    }
+
+    private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+
+        hideSoftKeyboard();
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        mMap.clear();
+
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
+
+        if(placeInfo != null){
+            try{
+                String snippet = "Address: " + placeInfo.getAddress() + "\n" +
+                        "Phone Number: " + placeInfo.getPhoneNumber() + "\n" +
+                        "Website: " + placeInfo.getWebsiteUri() + "\n" +
+                        "Price Rating: " + placeInfo.getRating() + "\n";
+
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title(placeInfo.getName())
+                        .snippet(snippet);
+                mMarker = mMap.addMarker(options);
+
+            }catch (NullPointerException e){
+                Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage() );
+            }
+        }else{
+            mMap.addMarker(new MarkerOptions().position(latLng));
+        }
+
+
     }
 
     @Override
@@ -617,7 +657,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+
     }
 
     private void getAllPermissions() {
