@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private List<Polyline> polylines;
 
+    private Location currentLocation;
+
     private static final int[] COLORS = new int[]{R.color.colorPrimaryDark,R.color.colorPrimary,R.color.colorPrimary,R.color.colorAccent,R.color.primary_dark_material_light};
 
     //private static final LatLngBounds BOUNDS_JAMAICA= new LatLngBounds(new LatLng(-57.965341647205726, 144.9987719580531), new LatLng(72.77492067739843, -9.998857788741589));
@@ -318,11 +320,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
+                            currentLocation = (Location) task.getResult();
 
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    15f,
-                                    "My Location");
+                            try{
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                        15f,
+                                        "My Location");
+                            }catch (Exception e){
+                                Log.d(TAG, "onComplete: move Camera Error: "+e.getMessage());
+                            }
+
+
 
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
