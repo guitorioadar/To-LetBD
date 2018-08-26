@@ -11,13 +11,17 @@ import android.widget.TextView;
 import com.androvaid.guitorio.to_letbd.R;
 import com.androvaid.guitorio.to_letbd.model.postsdetail.PostsCategory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PostsCategoryAdapter extends RecyclerView.Adapter<PostsCategoryAdapter.PostsCategoryAdapterViewHolder>  {
 
 
     private Context context;
-    private PostsCategory[] postsCategories;
+    //private PostsCategory[] postsCategories;
+    private List<PostsCategory> postsCategories;
 
-    public PostsCategoryAdapter(Context context, PostsCategory[] postsCategories) {
+    public PostsCategoryAdapter(Context context, List<PostsCategory> postsCategories) {
         this.context = context;
         this.postsCategories = postsCategories;
     }
@@ -34,7 +38,7 @@ public class PostsCategoryAdapter extends RecyclerView.Adapter<PostsCategoryAdap
     @Override
     public void onBindViewHolder(@NonNull PostsCategoryAdapterViewHolder holder, int position) {
 
-        final PostsCategory postsCategory = postsCategories[position];
+        final PostsCategory postsCategory = postsCategories.get(position);
 
         holder.tvCategoryFeatures.setText(postsCategory.getName());
 
@@ -42,7 +46,7 @@ public class PostsCategoryAdapter extends RecyclerView.Adapter<PostsCategoryAdap
 
     @Override
     public int getItemCount() {
-        return postsCategories.length;
+        return postsCategories.size();
     }
 
     public class PostsCategoryAdapterViewHolder extends RecyclerView.ViewHolder{

@@ -271,11 +271,11 @@
                                 android:gravity="center"
                                 android:textStyle="bold"/>
 
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/recyclerViewCategories"
+                            <!--<android.support.v7.widget.RecyclerView
+                                android:id="@+id/recyclerViewPostCategories"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="12dp"/>
+                                android:padding="12dp"/>-->
 
                         </LinearLayout>
 
@@ -304,11 +304,11 @@
 
                     </LinearLayout>
 
-                    <!--<android.support.v7.widget.RecyclerView
-                        android:id="@+id/recyclerViewCategories"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recyclerViewPostCategories"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"/>-->
+                        android:padding="12dp"/>
 
 
                 </LinearLayout>
