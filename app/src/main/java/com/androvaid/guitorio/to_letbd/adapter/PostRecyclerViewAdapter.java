@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androvaid.guitorio.to_letbd.R;
 import com.androvaid.guitorio.to_letbd.activity.PropertyDetailActivity;
+import com.androvaid.guitorio.to_letbd.activity.TestActivity;
 import com.androvaid.guitorio.to_letbd.model.posts.Posts;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
@@ -69,13 +71,28 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 Log.d(TAG, "onClick: title: "+post.getTitle());
                 Log.d(TAG, "onClick: Image: "+post.getFeaturedPhoto());
 
-                PropertyDetailActivity propertyDetailActivity = new PropertyDetailActivity();
-                propertyDetailActivity.passPostId(post.getId());
+                /*PropertyDetailActivity propertyDetailActivity = new PropertyDetailActivity();
+                propertyDetailActivity.passPostId(context,post.getId());*/
 
-                context.startActivity(new Intent(context,PropertyDetailActivity.class));
+                /*TestActivity testActivity = new TestActivity();
+                testActivity.passPostId(context,post.getId());*/
+
+                //context.startActivity(new Intent(context,PropertyDetailActivity.class));
+                //context.startActivity(new Intent(context,TestActivity.class));
+
+                openActivity(context,post.getId().toString());
+                //Toast.makeText(context, "ID: "+post.getId(), Toast.LENGTH_SHORT).show();
 
             }
         });
+
+    }
+
+    private void openActivity(Context context, String id) {
+
+        Intent intent = new Intent(context,PropertyDetailActivity.class);
+        intent.putExtra("producatId",id);
+        context.startActivity(intent);
 
     }
 

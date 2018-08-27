@@ -11,13 +11,15 @@ import android.widget.TextView;
 import com.androvaid.guitorio.to_letbd.R;
 import com.androvaid.guitorio.to_letbd.model.postsdetail.PostsFeature;
 
+import java.util.List;
+
 public class PostsFeaturesAdapter extends RecyclerView.Adapter<PostsFeaturesAdapter.PostsFeaturesAdapterViewHolder>  {
 
 
     Context context;
-    PostsFeature[] postsFeatures;
+    List<PostsFeature> postsFeatures;
 
-    public PostsFeaturesAdapter(Context context, PostsFeature[] postsFeatures) {
+    public PostsFeaturesAdapter(Context context, List<PostsFeature> postsFeatures) {
         this.context = context;
         this.postsFeatures = postsFeatures;
     }
@@ -34,7 +36,7 @@ public class PostsFeaturesAdapter extends RecyclerView.Adapter<PostsFeaturesAdap
     @Override
     public void onBindViewHolder(@NonNull PostsFeaturesAdapterViewHolder holder, int position) {
 
-        PostsFeature postsFeature = postsFeatures[position];
+        PostsFeature postsFeature = postsFeatures.get(position);
 
         holder.tvCategoryFeatures.setText(postsFeature.getTitle());
 
@@ -42,7 +44,7 @@ public class PostsFeaturesAdapter extends RecyclerView.Adapter<PostsFeaturesAdap
 
     @Override
     public int getItemCount() {
-        return postsFeatures.length;
+        return postsFeatures.size();
     }
 
     public class PostsFeaturesAdapterViewHolder extends RecyclerView.ViewHolder{

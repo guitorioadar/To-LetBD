@@ -1,5 +1,7 @@
 package com.androvaid.guitorio.to_letbd.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,24 +34,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PropertyDetailActivity extends AppCompatActivity implements InterfaceDataPass {
+public class PropertyDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "PropertyDetailActivity";
 
+    // Categories
     @BindView(R.id.recyclerViewPostCategories)
     RecyclerView recyclerViewPostCategories;
-
-    //RecyclerView recyclerViewPostCategories;
-
-    //private RecyclerView recyclerViewCategories;
-    //private RecyclerView recyclerViewFeatures;
-
-    private RecyclerView recyclerView;
     private PostsCategoryAdapter mPostsCategoryAdapter;
 
+    // Features
+    @BindView(R.id.recyclerViewFeatures)
+    RecyclerView recyclerViewFeatures;
+    private PostsFeaturesAdapter mPostsFeaturesAdapter;
+
     List<PostsCategory> postsCategories = new ArrayList<>();
-    List<PostsImage> postsImages;
-    List<PostsFeature> postsFeatures;
+    List<PostsImage> postsImages = new ArrayList<>();
+    List<PostsFeature> postsFeatures = new ArrayList<>();
+
+    private String productId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +64,32 @@ public class PropertyDetailActivity extends AppCompatActivity implements Interfa
          * ------------------- Initialize ------------------
          * */
 
-
-        if (recyclerViewPostCategories == null)
-            recyclerViewPostCategories = findViewById(R.id.recyclerViewPostCategories);
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerViewPostCategories.setLayoutManager(mLayoutManager);
+        // Categories
+        recyclerViewPostCategories.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewPostCategories.setItemAnimator(new DefaultItemAnimator());
-
-        /*recyclerViewPostCategories.setLayoutManager(new LinearLayoutManager(PropertyDetailActivity.this));
-        recyclerViewPostCategories.setAdapter(new PostsCategoryAdapter(PropertyDetailActivity.this, postsCategories));*/
-
-        /*recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
-        recyclerViewCategories.setLayoutManager(new LinearLayoutManager(PropertyDetailActivity.this));*/
-
-        /*recyclerViewFeatures = findViewById(R.id.recyclerViewFeatures);
-        recyclerViewFeatures.setLayoutManager(new LinearLayoutManager(PropertyDetailActivity.this));*/
 
         /*
          * ------------------- Initialize ------------------
          * */
 
         /*
-         * ========== ToolBar Initializaation ===============
+        * ---------------- Intent -------------------
+        * */
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            productId = intent.getStringExtra("producatId");
+            Toast.makeText(this, "id: "+productId, Toast.LENGTH_SHORT).show();
+        }else {
+            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+        }
+
+        /*
+         * ---------------- Intent -------------------
+         * */
+
+        /*
+         * ========== ToolBar ===============
          * */
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPropertyDetail_main);
@@ -92,12 +98,10 @@ public class PropertyDetailActivity extends AppCompatActivity implements Interfa
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-            //getSupportActionBar().setTitle("BDT "+"7000");
-            //getSupportActionBar().setTitle(Html.fromHtml("<small>Property Price</small>"));
         }
 
         /*
-         * ================ Ends ==================
+         * ================ ToolBar Ends ==================
          * */
 
         /*
@@ -114,113 +118,51 @@ public class PropertyDetailActivity extends AppCompatActivity implements Interfa
          * ==============  Action Bar Button Ends =================
          * */
 
-    }
+        /*
+        * ---------------------------- Server Data ----------------------------------
+        * */
 
-    @Override
-    public void passPostId(Integer id) {
-        Log.d(TAG, "passPostId: ID: " + id);
-
-        Call<PostsDetailResponse> call = RetrofitClient.getInstance().getApi().getPostDetailResponse(id.toString());
+        Call<PostsDetailResponse> call = RetrofitClient.getInstance().getApi().getPostDetailResponse(productId);
 
         call.enqueue(new Callback<PostsDetailResponse>() {
             @Override
             public void onResponse(Call<PostsDetailResponse> call, Response<PostsDetailResponse> response) {
 
-                try {
-                    Log.d(TAG, "onResponse: Detail: " + response.body().getPostsDetail());
-                    Log.d(TAG, "onResponse: id: " + response.body().getPostsDetail().getId());
-                    Log.d(TAG, "onResponse: Title: " + response.body().getPostsDetail().getTitle());
+                postsCategories = response.body().getPostsDetail().getCategories();
+                postsFeatures = response.body().getPostsDetail().getPostsFeatures();
 
-                    postsCategories = response.body().getPostsDetail().getCategories();
-                    postsImages = response.body().getPostsDetail().getPostsImages();
-                    postsFeatures = response.body().getPostsDetail().getPostsFeatures();
+                for (PostsFeature postsFeature : postsFeatures) { Log.d(TAG, "onResponse: "+postsFeature.getTitle()); }
 
+                // Categories
+                setPostCategoriesRec(postsCategories);
 
-
-
-                    //mPostsCategoryAdapter.notifyDataSetChanged();
-
-                    //posts.toArray(new Posts[posts.size()])
-
-                    setPostCategories();
-                    //setPostFeatures();
-
-                    //PostsCategory[] arrPostsCategories = postsCategories.toArray(new PostsCategory[postsCategories.size()]);
-
-                    /*if (recyclerViewPostCategories == null) {
-                        recyclerViewPostCategories = findViewById(R.id.recyclerViewPostCategories);
-                    }
-
-                    try {
-                        //recyclerViewCategories.setAdapter(new PostsCategoryAdapter(PropertyDetailActivity.this, postsCategories.toArray(new PostsCategory[postsCategories.size()])));
-
-                        *//*recyclerViewPostCategories.setLayoutManager(new LinearLayoutManager(PropertyDetailActivity.this));
-                        recyclerViewPostCategories.setAdapter(new PostsCategoryAdapter(PropertyDetailActivity.this, postsCategories));*//*
-
-
-                        Log.d(TAG, "setPostCategories: ");
-
-                    } catch (Exception e) {
-                        Log.d(TAG, "setPostCategories: Error: " + e.getMessage());
-                    }*/
-
-
-                } catch (Exception e) {
-                    Log.d(TAG, "onResponse: CallBack error: " + e.getMessage()+" \n\nCause: "+e.getCause()+" \n\nLocalizedMessage: "+e.getLocalizedMessage()+" \n\nStackTrace: "+ Arrays.toString(e.getStackTrace()));
-                }
-
+                // Features
+                setPostFeaturesRec(postsFeatures);
 
             }
 
             @Override
             public void onFailure(Call<PostsDetailResponse> call, Throwable t) {
 
-                Log.d(TAG, "onFailure: Call: " + call + " Throwable: " + t.getMessage());
-
             }
         });
 
-    }
-
-    private void setPostFeatures() {
-
-        //recyclerViewFeatures.setAdapter(new PostsFeaturesAdapter(PropertyDetailActivity.this,postsFeatures.toArray(new PostsFeature[postsFeatures.size()])));
+        /*
+         * ---------------------------- Server Data ----------------------------------
+         * */
 
     }
 
-    private void setPostCategories() {
-
-        Log.d(TAG, "setPostCategories: Into: " + postsCategories.toArray(new PostsCategory[postsCategories.size()]));
-
-        try {
-            mPostsCategoryAdapter = new PostsCategoryAdapter(PropertyDetailActivity.this,postsCategories);
-            recyclerViewPostCategories.setAdapter(mPostsCategoryAdapter);
-        }catch (Exception e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        /*PostsCategory[] arrPostsCategories = postsCategories.toArray(new PostsCategory[postsCategories.size()]);
-
-        if (recyclerViewPostCategories == null) {
-            recyclerViewPostCategories = findViewById(R.id.recyclerViewPostCategories);
-        }
-
-        try {
-            //recyclerViewCategories.setAdapter(new PostsCategoryAdapter(PropertyDetailActivity.this, postsCategories.toArray(new PostsCategory[postsCategories.size()])));
-
-
-            recyclerViewPostCategories.setLayoutManager(new LinearLayoutManager(PropertyDetailActivity.this));
-            recyclerViewPostCategories.setAdapter(new PostsCategoryAdapter(this, arrPostsCategories));
-
-
-            Log.d(TAG, "setPostCategories: ");
-
-        } catch (Exception e) {
-            Log.d(TAG, "setPostCategories: Error: " + e.getMessage());
-        }*/
-
-
+    private void setPostFeaturesRec(List<PostsFeature> postsFeatures) {
+        mPostsFeaturesAdapter = new PostsFeaturesAdapter(this,postsFeatures);
+        recyclerViewFeatures.setAdapter(mPostsFeaturesAdapter);
     }
+
+    private void setPostCategoriesRec(List<PostsCategory> postsCategories) {
+        mPostsCategoryAdapter = new PostsCategoryAdapter(this,postsCategories);
+        recyclerViewPostCategories.setAdapter(mPostsCategoryAdapter);
+    }
+
 
     @Override
     public void onBackPressed() {
