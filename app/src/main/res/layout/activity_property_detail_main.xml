@@ -27,13 +27,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
+                <!--<ImageView
                     android:layout_width="match_parent"
                     android:layout_height="350dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop"
                     android:src="@drawable/lake"
-                    app:layout_collapseMode="parallax" />
+                    app:layout_collapseMode="parallax" />-->
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:background="@drawable/preview_box_gradient">
+
+                </android.support.v4.view.ViewPager>
 
                 <!--<TextView
                     android:id="@+id/tvPriceDetail_main"

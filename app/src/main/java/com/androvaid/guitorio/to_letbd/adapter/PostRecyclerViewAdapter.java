@@ -91,6 +91,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     private void openActivity(Context context, String id) {
 
         Intent intent = new Intent(context,PropertyDetailActivity.class);
+        //Intent intent = new Intent(context,TestActivity.class);
         intent.putExtra("producatId",id);
         context.startActivity(intent);
 

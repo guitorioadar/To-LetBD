@@ -19,6 +19,7 @@ import com.androvaid.guitorio.to_letbd.model.categories.CategoriesResponse;
 import com.androvaid.guitorio.to_letbd.model.posts.Posts;
 import com.androvaid.guitorio.to_letbd.model.posts.PostsResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -30,8 +31,8 @@ public class PropertyList extends AppCompatActivity {
 
     private static final String TAG = "PropertyList";
 
-    private List<Categories> categories;
-    private List<Posts> posts;
+    private List<Categories> categories = new ArrayList<>();
+    private List<Posts> posts = new ArrayList<>();
     private Posts[] arrayPosts;
     private String[] categoryNames;
 

@@ -41,17 +41,17 @@
 
         <activity android:name=".activity.MapsActivity" />
         <activity android:name=".activity.SplashScreenActivity">
-
-        </activity>
-        <activity
-            android:name=".activity.PropertyDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar.Detail"></activity>
-        <activity android:name=".activity.PropertyList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.PropertyDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar.Detail"></activity>
+        <activity android:name=".activity.PropertyList">
+
         </activity>
         <activity android:name=".activity.TestActivity"></activity>
     </application>
