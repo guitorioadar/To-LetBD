@@ -46,7 +46,8 @@
                     android:textSize="20sp"
                     android:textColor="@color/white"
                     android:gravity="center"
-                    android:background="@drawable/background_no"/>
+                    android:background="@drawable/background_no"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 
@@ -87,23 +88,55 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/tvPropertyTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:padding="12dp"
+                        android:hint="Property One"
+                        android:textColorHint="@color/gray"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:padding="12dp"
-                        android:text="@string/recent_news"
+                        android:hint="@string/recent_news"
+                        android:textColorHint="@color/gray"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginBottom="12dp"
-                        android:layout_marginRight="20dp"
-                        android:text="Property id: 17982045" />
+                        android:orientation="horizontal"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:text="Property Price: BDT"
+                            android:layout_weight="1"/>
+
+                        <EditText
+                            android:id="@+id/tvProductPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_gravity="right"
+                            android:hint="7000"
+                            android:inputType="number"
+                            android:textColorHint="@color/gray"
+                            android:layout_weight="1"/>
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -120,12 +153,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Area: " />
+                            android:text="Area: (sft) " />
 
-                        <TextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="number" />
+                            android:hint="1200"
+                            android:textColorHint="@color/gray"
+                            android:inputType="number"/>
 
                         <View
                             android:layout_width="1dp"
@@ -139,10 +174,12 @@
                             android:layout_marginLeft="10dp"
                             android:text="Bed: " />
 
-                        <TextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="number" />
+                            android:hint="2/3"
+                            android:textColorHint="@color/gray"
+                            android:inputType="number"/>
 
                         <View
                             android:layout_width="1dp"
@@ -156,10 +193,12 @@
                             android:layout_marginLeft="10dp"
                             android:text="Bath: " />
 
-                        <TextView
+                        <EditText
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="number" />
+                            android:hint="1/2"
+                            android:textColorHint="@color/gray"
+                            android:inputType="number"/>
 
 
                     </LinearLayout>
@@ -173,7 +212,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="12dp">
+                        android:paddingLeft="12dp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="0dp"
@@ -210,12 +250,13 @@
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingMultiplier="1.2"
                         android:padding="12dp"
-                        android:text="@string/in_news"
+                        android:hint="@string/in_news"
+                        android:textColorHint="@color/gray"
                         android:textAlignment="center"
                         android:textSize="14sp" />
 
@@ -270,24 +311,11 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
                                 android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
-                            <!--<Switch
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"/>-->
+                                android:layout_marginStart="20dp" />
 
                         </FrameLayout>
 
@@ -320,20 +348,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -366,20 +384,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -412,20 +420,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -458,20 +456,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -504,20 +492,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -550,20 +528,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_no"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="NO"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -624,20 +592,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -670,20 +628,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -716,20 +664,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -790,20 +728,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_no"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="NO"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -836,20 +764,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -882,20 +800,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -928,20 +836,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_no"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="NO"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -974,20 +872,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1048,20 +936,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1094,20 +972,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_no"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="NO"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1140,20 +1008,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1186,20 +1044,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_no"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="NO"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1232,20 +1080,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1278,20 +1116,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1324,20 +1152,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_no"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="NO"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1370,20 +1188,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1416,20 +1224,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight=".5">
 
-                            <TextView
+                            <Switch
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left|center_vertical"
-                                android:layout_marginLeft="20dp"
-                                android:background="@drawable/background_yes"
-                                android:gravity="center_vertical"
-                                android:paddingBottom="5dp"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="10dp"
-                                android:paddingTop="5dp"
-                                android:text="YES"
-                                android:textColor="@color/white"
-                                android:textSize="10sp" />
+                                android:layout_marginLeft="20dp"/>
 
                         </FrameLayout>
 
@@ -1442,6 +1240,18 @@
 
                 </LinearLayout>
 
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="upload" />
 
             </android.support.v7.widget.CardView>
 
@@ -1458,6 +1268,11 @@
         android:src="@drawable/ic_fab"
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|end|right"
-        app:pressedTranslationZ="12dp" />
+        app:pressedTranslationZ="12dp"
+        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>
+
+
+
+
