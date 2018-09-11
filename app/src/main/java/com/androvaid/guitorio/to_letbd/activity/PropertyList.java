@@ -31,9 +31,11 @@ public class PropertyList extends AppCompatActivity {
 
     private static final String TAG = "PropertyList";
 
-    private List<Categories> categories = new ArrayList<>();
+
     private List<Posts> posts = new ArrayList<>();
     private Posts[] arrayPosts;
+
+    private List<Categories> categories = new ArrayList<>();
     private String[] categoryNames;
 
     private MaterialSpinner spnCategory, spnSortBy;

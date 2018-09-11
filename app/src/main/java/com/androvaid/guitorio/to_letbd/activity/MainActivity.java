@@ -600,6 +600,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Log.d(TAG, "onRoutingSuccess: Successful");
 
+        //Log.d(TAG, "onRoutingSuccess: "+route.toString());
+
+        for (Route route1 : route) {
+            Log.d(TAG, "onRoutingSuccess: each: "+route1);
+        }
+
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(23.8209705, 90.3663411));
         //CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(23.777729, 90.396235));
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);

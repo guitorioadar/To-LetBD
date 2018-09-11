@@ -196,11 +196,6 @@ public class PropertyDetailActivity extends AppCompatActivity {
             }
         });
 
-        /*
-         * ---------------------------- Server Data ----------------------------------
-         * */
-
-        // Images
 
 
     }

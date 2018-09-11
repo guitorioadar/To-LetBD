@@ -1,6 +1,7 @@
 package com.androvaid.guitorio.to_letbd.api;
 
 import com.androvaid.guitorio.to_letbd.model.categories.CategoriesResponse;
+import com.androvaid.guitorio.to_letbd.model.features.FeaturesResponse;
 import com.androvaid.guitorio.to_letbd.model.posts.Posts;
 import com.androvaid.guitorio.to_letbd.model.posts.PostsResponse;
 import com.androvaid.guitorio.to_letbd.model.postsdetail.PostsDetailResponse;
@@ -14,6 +15,9 @@ public interface Api {
 
     @GET("categories")
     Call<CategoriesResponse> getCategories();
+
+    @GET("features")
+    Call<FeaturesResponse> getFeatures();
 
     @GET("posts")
     Call<PostsResponse> getPosts();

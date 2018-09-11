@@ -40,12 +40,21 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".activity.MapsActivity" />
-        <activity android:name=".activity.SplashScreenActivity"></activity>
+        <activity android:name=".activity.SplashScreenActivity">
+
+
+
+        </activity>
         <activity
             android:name=".activity.PropertyDetailActivity"
             android:theme="@style/AppTheme.NoActionBar.Detail" />
         <activity android:name=".activity.PropertyList" />
-        <activity android:name=".activity.TestActivity" />
+        <activity android:name=".activity.TestActivity"
+            android:configChanges="orientation|screenSize">
+
+
+
+        </activity>
         <activity
             android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme.Fullscreen">
@@ -56,11 +65,13 @@
             android:theme="@style/AppTheme.Fullscreen" />
         <activity android:name=".activity.PostCreateActivity"
             android:theme="@style/AppTheme.NoActionBar.Detail">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
