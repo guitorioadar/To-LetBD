@@ -14,26 +14,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androvaid.guitorio.to_letbd.R;
+import com.androvaid.guitorio.to_letbd.api.RetrofitClient;
+import com.androvaid.guitorio.to_letbd.model.signin.SignInResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @BindView(R.id.input_email) EditText _emailText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_login) Button _loginButton;
-    @BindView(R.id.link_signup) TextView _signupLink;
+
+    String token = null;
+
+    @BindView(R.id.input_email)
+    EditText _emailText;
+    @BindView(R.id.input_password)
+    EditText _passwordText;
+    @BindView(R.id.btn_login)
+    Button _loginButton;
+    @BindView(R.id.link_signup)
+    TextView _signupLink;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
-
 
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
@@ -65,10 +80,9 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        _loginButton.setEnabled(false);
+        _loginButton.setEnabled(true);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
@@ -78,7 +92,70 @@ public class LoginActivity extends AppCompatActivity {
 
         // TODO: Implement your own authentication logic here.
 
-        new android.os.Handler().postDelayed(
+        Log.d(TAG, "onLoginSuccess: Email: " + email + " Pass: " + password);
+
+        Call<SignInResponse> call = RetrofitClient.getInstance().getApi().getSignInResponse(email, password);
+
+        call.enqueue(new Callback<SignInResponse>() {
+            @Override
+            public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
+
+                progressDialog.dismiss();
+
+
+                try {
+
+                    if (response.body().getMeta().toString() != null) {
+
+                        Integer meta = response.body().getMeta().getStatus();
+                        String message = response.body().getResponse().getMessage();
+
+                        if (meta.equals(200)) {
+                            token = response.body().getResponse().getToken();
+                            startActivity(new Intent(getApplicationContext(),PropertyList.class));
+                        }
+
+
+                        Log.d(TAG, "onResponse: Meta: " + meta + " message: " + message+" token: "+token);
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Getting no Data", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onResponse: Exception: " + e.getMessage());
+                }
+
+
+
+                /*if (response.body() != null) {
+                    signInMeta  = response.body().getMeta().toString();
+                    signInMessage = response.body().getSignIn().getMessage();
+                    signInToken = response.body().getSignIn().getToken();
+                }else {
+                    Toast.makeText(LoginActivity.this, "Internal Problem", Toast.LENGTH_SHORT).show();
+                }
+
+                if (signInToken!=null){
+                    // On complete call either onLoginSuccess or onLoginFailed
+                    onLoginSuccess();
+                    // onLoginFailed();
+                    progressDialog.dismiss();
+                }else {
+                    Toast.makeText(LoginActivity.this, signInMessage, Toast.LENGTH_SHORT).show();
+                }*/
+
+            }
+
+            @Override
+            public void onFailure(Call<SignInResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Something went wrong !!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        /*new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
@@ -86,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                }, 3000);*/
     }
 
 
@@ -109,8 +186,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
+
+        //Toast.makeText(this, signInMessage, Toast.LENGTH_SHORT).show();
+
         _loginButton.setEnabled(true);
-        finish();
+        //finish();
     }
 
     public void onLoginFailed() {

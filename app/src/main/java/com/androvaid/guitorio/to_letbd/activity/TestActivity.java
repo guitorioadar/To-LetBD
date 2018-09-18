@@ -18,8 +18,10 @@ import android.widget.Toast;
 import com.androvaid.guitorio.to_letbd.R;
 import com.androvaid.guitorio.to_letbd.adapter.ViewPagerLocalAdapter;
 import com.androvaid.guitorio.to_letbd.api.RetrofitClient;
+import com.androvaid.guitorio.to_letbd.meta.Meta;
 import com.androvaid.guitorio.to_letbd.model.features.Features;
 import com.androvaid.guitorio.to_letbd.model.features.FeaturesResponse;
+import com.androvaid.guitorio.to_letbd.model.signin.SignInResponse;
 import com.androvaid.guitorio.to_letbd.widget.GetDummyValues;
 import com.androvaid.guitorio.to_letbd.widget.MultiSelectSpinner;
 import com.bumptech.glide.Glide;
@@ -42,154 +44,69 @@ import retrofit2.Response;
 public class TestActivity extends AppCompatActivity {
 
     private static final String TAG = "TestActivity";
-
-    String[] strings = {"Red", "Blue", "Green"};
-
-    MultiSelectSpinner mySpin;
-
-    private static final String DEFAULT_TEXT = "Select - Value";
-    private GetDummyValues getDummyValues;
-    private Button button;
-    private MultiSelectSpinner myMultispinner;
-    private String titleText = "Your Title Here";
-
-    private List<Features> features = new ArrayList<>();
-    private List<String> featureIds = new ArrayList<>();
-    private List<String> featureTitles = new ArrayList<>();
-
     ProgressDialog progressDialog;
 
+    String token = null;
+
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
 
+        Button buttonPress = findViewById(R.id.buttonPress);
 
-        init();
-
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-
-
-        /*for (int i = 0; i < 20; i++) {
-            featureIds.add(String.valueOf(i));
-            featureTitles.add("Value "+i);
-        }*/
-
-        /*
-         * --------------------------- Features Spinner ---------------------------
-         * */
-
-        Call<FeaturesResponse> call = RetrofitClient.getInstance().getApi().getFeatures();
-
-        call.enqueue(new Callback<FeaturesResponse>() {
+        buttonPress.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<FeaturesResponse> call, Response<FeaturesResponse> response) {
+            public void onClick(View v) {
 
-                progressDialog.dismiss();
+                Call<SignInResponse> call = RetrofitClient.getInstance().getApi().getSignInResponse("mdshahin0002@gmail.com", "123456");
 
-                Log.d(TAG, "onResponse: "+response);
-
-                features = response.body().getFeatures();
-
-                for (Features feature : features) {
-                    featureIds.add(feature.getId().toString());
-                    featureTitles.add(feature.getTitle());
-                }
-
-                for (String featureTitle : featureTitles) {
-                    Log.d(TAG, "onResponse: Feat Title: "+featureTitle);
-                }
-
-                for (String featureId : featureIds) {
-                    Log.d(TAG, "onResponse: Feat ID: "+featureId);
-                }
-
-                myMultispinner.setItems(featureTitles, featureIds, DEFAULT_TEXT,titleText);
-
-                /*featureTitles = new String[features.size()];
-                featureIds = new String[features.size()];
-
-                for (int i = 0; i < features.size(); i++) {
-                    featureTitles[i] = String.valueOf(features.get(i).getTitle());
-                    Log.d(TAG, "onResponse: featureTitles: "+ featureTitles[i]);
-                }
-
-                for (int i = 0; i<features.size(); i++){
-                    featureIds[i] = String.valueOf(features.get(i).getId());
-                    Log.d(TAG, "onResponse: featureIds: "+ featureIds[i]);
-                }*/
-
-                /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(PropertyList.this, android.R.layout.simple_spinner_item, categoryNames);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                spnCategory.setAdapter(adapter);
-
-                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                call.enqueue(new Callback<SignInResponse>() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
 
                         try {
-                            //Toast.makeText(PropertyList.this, parent.getItemAtPosition(position).toString() + " ID: " + categories.get(position).getId(), Toast.LENGTH_SHORT).show();
 
-                            _category = parent.getItemAtPosition(position).toString();
-                            _categoryId = categories.get(position).getId().toString();
+                            if (response.body().getMeta().toString() != null) {
 
-                            Log.d(TAG, "onItemSelected: spnCategory: "+_category + " ID: " + _categoryId);
+                                Integer meta = response.body().getMeta().getStatus();
+                                String message = response.body().getResponse().getMessage();
+
+                                if (meta.equals(200)) {
+                                    token = response.body().getResponse().getToken();
+                                    startActivity(new Intent(TestActivity.this,PropertyList.class));
+                                }
+
+
+                                Log.d(TAG, "onResponse: Meta: " + meta + " message: " + message+" token: "+token);
+
+                            } else {
+                                Toast.makeText(TestActivity.this, "Getting no Data", Toast.LENGTH_SHORT).show();
+                            }
+
 
                         } catch (Exception e) {
-                            Log.d(TAG, "onItemSelected: spnCategory" + e.getMessage());
+                            Toast.makeText(TestActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onResponse: Exception: " + e.getMessage());
                         }
+
                     }
 
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
+                    public void onFailure(Call<SignInResponse> call, Throwable t) {
 
                     }
-                });*/
-
-            }
-
-            @Override
-            public void onFailure(Call<FeaturesResponse> call, Throwable t) {
-
-                Log.d(TAG, "onFailure: " + t.getMessage());
+                });
 
             }
         });
 
-        /*
-         * --------------------------- Category Spinner Ends ---------------------------
-         * */
-
-
-
 
     }
 
-    private void init() {
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading");
-
-        myMultispinner = (MultiSelectSpinner) findViewById(R.id.view);
-        button = (Button) findViewById(R.id.buttonPress);
-
-
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((TextView) findViewById(R.id.textViewIds)).setText(myMultispinner.getSelectedIdsAsString());
-                ((TextView) findViewById(R.id.textViewNames)).setText(myMultispinner.getSelectedItemsAsString());
-            }
-        });
-
-        getDummyValues = new GetDummyValues();
-        //myMultispinner.setItems(getDummyValues.getValues(), getDummyValues.getIds(), DEFAULT_TEXT,titleText);
-
-
-
-    }
 }

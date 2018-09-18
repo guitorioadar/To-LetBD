@@ -62,15 +62,17 @@
         </activity>
         <activity
             android:name=".activity.SignupActivity"
-            android:theme="@style/AppTheme.Fullscreen" />
-        <activity android:name=".activity.PostCreateActivity"
-            android:theme="@style/AppTheme.NoActionBar.Detail">
-
+            android:theme="@style/AppTheme.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.PostCreateActivity"
+            android:theme="@style/AppTheme.NoActionBar.Detail">
+
+
 
         </activity>
     </application>

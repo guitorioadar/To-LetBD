@@ -96,6 +96,7 @@ public class PropertyList extends AppCompatActivity {
             @Override
             public void onResponse(Call<CategoriesResponse> call, Response<CategoriesResponse> response) {
 
+                assert response.body() != null;
                 categories = response.body().getCategories();
 
                 categoryNames = new String[categories.size()];

@@ -66,13 +66,7 @@ dependencies {
     // ButterKnife
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
-
-
-
-
-
     //implementation 'com.github.huzhenjie:ImageSelector:1.0.3'
     implementation project(':selectorlibrary')
-
+    implementation files('libs/ImageBase64Encoder.jar')
 }

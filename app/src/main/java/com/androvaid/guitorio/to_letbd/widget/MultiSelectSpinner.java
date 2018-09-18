@@ -167,6 +167,10 @@ public class MultiSelectSpinner extends Spinner implements DialogInterface.OnMul
         return sb.toString();
     }
 
+    public List<String> getSelectedItemsAsArray(){
+        return items;
+    }
+
     public String getSelectedIdsAsString() {
         StringBuilder sb = new StringBuilder();
         boolean isFirst = false;

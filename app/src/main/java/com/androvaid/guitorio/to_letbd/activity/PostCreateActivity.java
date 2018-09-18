@@ -17,10 +17,14 @@ import com.androvaid.guitorio.to_letbd.model.categories.CategoriesResponse;
 import com.androvaid.guitorio.to_letbd.model.features.Features;
 import com.androvaid.guitorio.to_letbd.model.features.FeaturesResponse;
 import com.androvaid.guitorio.to_letbd.widget.MultiSelectSpinner;
+import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.scrat.app.selectorlibrary.ImageSelector;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,6 +38,7 @@ public class PostCreateActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_SELECT_IMG = 1;
 
     private List<String> yourSelectImgPaths = new ArrayList<>();
+    private List<String> imagesBase64 = new ArrayList<>();
 
     /*@BindView(R.id.view_pager_post_create)
     ViewPager view_pager_post_create;*/
@@ -72,6 +77,8 @@ public class PostCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_create);
 
+        Log.d(TAG, "onCreate: inside");
+        
         initView();
 
         progressDialog.show();
@@ -85,6 +92,8 @@ public class PostCreateActivity extends AppCompatActivity {
 
     private void getCategories() {
 
+        Log.d(TAG, "getCategories: inside");
+        
         Call<CategoriesResponse> call = RetrofitClient.getInstance().getApi().getCategories();
         call.enqueue(new Callback<CategoriesResponse>() {
             @Override
@@ -93,6 +102,9 @@ public class PostCreateActivity extends AppCompatActivity {
                 categories = response.body().getCategories();
 
                 for (Categories category : categories) {
+
+                    Log.d(TAG, "onResponse: Categories getName: "+category.getName());
+
                     categoryIds.add(category.getId().toString());
                     categoryNames.add(category.getName());
                 }
@@ -109,6 +121,8 @@ public class PostCreateActivity extends AppCompatActivity {
     }
     private void getFeatures() {
 
+        Log.d(TAG, "getFeatures: inside");
+
         Call<FeaturesResponse> call = RetrofitClient.getInstance().getApi().getFeatures();
         call.enqueue(new Callback<FeaturesResponse>() {
             @Override
@@ -119,6 +133,9 @@ public class PostCreateActivity extends AppCompatActivity {
                 features = response.body().getFeatures();
 
                 for (Features feature : features) {
+
+                    Log.d(TAG, "onResponse: Features getTitle: "+feature.getTitle());
+
                     featureIds.add(feature.getId().toString());
                     featureTitles.add(feature.getTitle());
                 }
@@ -143,8 +160,9 @@ public class PostCreateActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
 
-        //viewPager
+        // viewPager
         viewPager = findViewById(R.id.view_pager_post_create);
+
         // spn
         multiSelectSpinnerCategories = findViewById(R.id.multiSelectSpinnerCategories);
         multiSelectSpinnerFeatures = findViewById(R.id.multiSelectSpinnerFeatures);
@@ -157,11 +175,28 @@ public class PostCreateActivity extends AppCompatActivity {
             yourSelectImgPaths = ImageSelector.getImagePaths(data);
             Log.d("imgSelector", "paths: " + yourSelectImgPaths);
 
-            //textView.setText(yourSelectImgPaths.toString());
+            /*
+            * ----------- base64 ------------
+            * */
+            for (String yourSelectImgPath : yourSelectImgPaths) {
+                try {
+                    String encodedImage = ImageBase64
+                            .with(getApplicationContext())
+                            .noScale()
+                            .encodeFile(yourSelectImgPath);
 
-            //Glide.with(TestActivity.this).load(yourSelectImgPaths.get(0)).into(imageViewTest);
+                    imagesBase64.add(encodedImage);
 
-            // Images
+                    Log.d(TAG, "onActivityResult: Image Path: "+yourSelectImgPath+" Encoded To Base64: "+encodedImage);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            /*
+             * ----------- base64 ------------
+             * */
 
             ViewPagerLocalAdapter adapter = new ViewPagerLocalAdapter(PostCreateActivity.this, yourSelectImgPaths);
             viewPager.setAdapter(adapter);
@@ -199,6 +234,7 @@ public class PostCreateActivity extends AppCompatActivity {
         Log.d(TAG, "btnUpload: Categori Ids List:"+multiSelectSpinnerCategories.getSelectedIdsAsArray());
 
         Log.d(TAG, "btnUpload: Features Ids: "+multiSelectSpinnerFeatures.getSelectedIdsAsString());
+        Log.d(TAG, "btnUpload: Features Ids: ArrayList: "+multiSelectSpinnerFeatures.getSelectedIdsAsArray());
 
     }
 }
