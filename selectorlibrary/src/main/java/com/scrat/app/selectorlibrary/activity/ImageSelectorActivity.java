@@ -18,6 +18,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,12 +76,13 @@ public class ImageSelectorActivity extends AppCompatActivity implements LoaderMa
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         mSelectSortPosList = new ArrayList<>();
         mAdapter = new SelectorAdapter(onItemClickListener);
-        final GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        //final GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(4,StaggeredGridLayoutManager.VERTICAL);
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
                 mRecyclerView.setHasFixedSize(true);
-                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, 10, false, mFinishTv.getMeasuredHeight(), mFinishTv.getMeasuredHeight() + 10));
+                mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(1, 0, true, mFinishTv.getMeasuredHeight(), mFinishTv.getMeasuredHeight()));
                 mRecyclerView.setLayoutManager(layoutManager);
                 mRecyclerView.setAdapter(mAdapter);
             }

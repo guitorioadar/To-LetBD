@@ -17,8 +17,12 @@ import com.androvaid.guitorio.to_letbd.model.categories.CategoriesResponse;
 import com.androvaid.guitorio.to_letbd.model.features.Features;
 import com.androvaid.guitorio.to_letbd.model.features.FeaturesResponse;
 import com.androvaid.guitorio.to_letbd.widget.MultiSelectSpinner;
+import com.bumptech.glide.Glide;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.kosalgeek.android.imagebase64encoder.ImageBase64;
 import com.scrat.app.selectorlibrary.ImageSelector;
+import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
+import com.zfdang.multiple_images_selector.SelectorSettings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,6 +43,10 @@ public class PostCreateActivity extends AppCompatActivity {
 
     private List<String> yourSelectImgPaths = new ArrayList<>();
     private List<String> imagesBase64 = new ArrayList<>();
+
+    private ArrayList<String> mResults = new ArrayList<>();
+    private static final int REQUEST_CODE = 123;
+
 
     /*@BindView(R.id.view_pager_post_create)
     ViewPager view_pager_post_create;*/
@@ -68,7 +76,24 @@ public class PostCreateActivity extends AppCompatActivity {
     public void favAddImage(View view) {
 
         //Toast.makeText(this, "Select Image", Toast.LENGTH_SHORT).show();
-        ImageSelector.show(this, REQUEST_CODE_SELECT_IMG);
+
+        //ImageSelector.show(this, REQUEST_CODE_SELECT_IMG);
+
+        /*// start multiple photos selector
+        Intent intent = new Intent(PostCreateActivity.this, ImagesSelectorActivity.class);
+        // max number of images to be selected
+        intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 15);
+        // min size of image which will be shown; to filter tiny images (mainly icons)
+        intent.putExtra(SelectorSettings.SELECTOR_MIN_IMAGE_SIZE, 10000);
+        // show camera or not
+        intent.putExtra(SelectorSettings.SELECTOR_SHOW_CAMERA, false);
+        // pass current selected images as the initial value
+        intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
+        // start the selector
+        startActivityForResult(intent, REQUEST_CODE);*/
+
+
+
 
     }
 
@@ -77,8 +102,10 @@ public class PostCreateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_create);
 
+        Fresco.initialize(PostCreateActivity.this);
+
         Log.d(TAG, "onCreate: inside");
-        
+
         initView();
 
         progressDialog.show();
@@ -93,7 +120,7 @@ public class PostCreateActivity extends AppCompatActivity {
     private void getCategories() {
 
         Log.d(TAG, "getCategories: inside");
-        
+
         Call<CategoriesResponse> call = RetrofitClient.getInstance().getApi().getCategories();
         call.enqueue(new Callback<CategoriesResponse>() {
             @Override
@@ -209,7 +236,7 @@ public class PostCreateActivity extends AppCompatActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    Toast.makeText(PostCreateActivity.this, "ID: "+yourSelectImgPaths.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostCreateActivity.this, "Path: "+yourSelectImgPaths.get(position), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -219,7 +246,49 @@ public class PostCreateActivity extends AppCompatActivity {
             });
 
             return;
+        }else if(requestCode == REQUEST_CODE){
+
+            mResults = data.getStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS);
+            assert mResults != null;
+
+            // show results in textview
+            StringBuffer sb = new StringBuffer();
+            sb.append(String.format("Totally %d images selected:", mResults.size())).append("\n");
+            for (String result : mResults) {
+                sb.append(result).append("\n");
+            }
+
+            Log.d(TAG, "onActivityResult: " + mResults);
+
+            /*Glide.with(SignupActivity.this)
+                    .load(mResults.get(0))
+                    .into(profileImage);*/
+            //tvResults.setText(sb.toString());
+
+
+            ViewPagerLocalAdapter adapter = new ViewPagerLocalAdapter(PostCreateActivity.this, mResults);
+            viewPager.setAdapter(adapter);
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    Toast.makeText(PostCreateActivity.this, "Path: "+mResults.get(position), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
+
         }
+
 
         super.onActivityResult(requestCode, resultCode, data);
     }

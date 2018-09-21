@@ -35,12 +35,42 @@
             android:paddingRight="24dp"
             android:paddingTop="56dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <!--<com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/profileImage"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                fresco:placeholderImage="@drawable/logo"/>-->
+
+            <!--<com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                app:roundedCornerRadius="5dp"
+                app:roundBottomStart="false"
+                app:roundBottomEnd="false"
+                app:roundWithOverlayColor="@color/app_blue_dark"
+                app:roundingBorderWidth="1dp"
+                app:roundingBorderColor="@color/google_red"/>-->
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profileImage"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/logo"
+                android:layout_gravity="center_horizontal"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FFFFFF"/>
+
+            <!--<ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
                 android:layout_marginBottom="24dp"
-                android:src="@drawable/logo" />
+                android:src="@drawable/logo" />-->
 
             <!-- Name Label -->
             <android.support.design.widget.TextInputLayout
@@ -66,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:textColorHint="@color/white">
+                android:textColorHint="@color/white"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/input_address"

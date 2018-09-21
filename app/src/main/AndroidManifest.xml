@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-
+    <uses-permission android:name="android.permission.CAMERA" />
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -62,19 +62,27 @@
         </activity>
         <activity
             android:name=".activity.SignupActivity"
-            android:theme="@style/AppTheme.Fullscreen" >
+            android:theme="@style/AppTheme.Fullscreen"
+            android:configChanges="orientation|screenSize">
+
+        </activity>
+        <activity android:name=".activity.PostCreateActivity"
+            android:theme="@style/AppTheme.NoActionBar.Detail">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activity.PostCreateActivity"
-            android:theme="@style/AppTheme.NoActionBar.Detail">
-
-
 
         </activity>
+
+        <activity
+            android:name="com.zfdang.multiple_images_selector.ImagesSelectorActivity"
+            android:hardwareAccelerated="false"
+            android:configChanges="orientation|screenSize"/>
+
+
     </application>
 
 </manifest>
