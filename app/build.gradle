@@ -68,7 +68,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // Multiple Image Selector
-
     // 1st: implementation 'com.github.huzhenjie:ImageSelector:1.0.3'
     implementation project(':selectorlibrary')
     implementation files('libs/ImageBase64Encoder.jar')
@@ -78,6 +77,9 @@ dependencies {
 
     // 3rd: multiple image select
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
+    // 4th: multiple image select
+    implementation 'com.droidninja:filepicker:2.1.5'
 
     // Circle Image
     implementation 'de.hdodenhof:circleimageview:2.2.0'

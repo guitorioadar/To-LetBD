@@ -16,6 +16,8 @@ public class RetrofitClient {
     private Retrofit retrofit;
 
 
+    // aida holo main jayga....
+
     private RetrofitClient() {
 
         Log.d(TAG, "RetrofitClient: inside");

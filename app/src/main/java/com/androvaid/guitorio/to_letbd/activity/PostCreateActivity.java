@@ -24,6 +24,8 @@ import com.scrat.app.selectorlibrary.ImageSelector;
 import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
 import com.zfdang.multiple_images_selector.SelectorSettings;
 
+import droidninja.filepicker.FilePickerConst;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class PostCreateActivity extends AppCompatActivity {
 
     private List<String> yourSelectImgPaths = new ArrayList<>();
     private List<String> imagesBase64 = new ArrayList<>();
+    private ArrayList<String> photoPaths = new ArrayList<String>();
+
 
     private ArrayList<String> mResults = new ArrayList<>();
     private static final int REQUEST_CODE = 123;
@@ -92,6 +96,10 @@ public class PostCreateActivity extends AppCompatActivity {
         // start the selector
         startActivityForResult(intent, REQUEST_CODE);*/
 
+        droidninja.filepicker.FilePickerBuilder.getInstance().setMaxCount(5)
+               .setSelectedFiles(photoPaths)
+               .setActivityTheme(R.style.LibAppTheme)
+               .pickPhoto(this);
 
 
 
@@ -287,6 +295,36 @@ public class PostCreateActivity extends AppCompatActivity {
             });
 
 
+        }else if(FilePickerConst.REQUEST_CODE_PHOTO==233){
+
+            //photoPaths = new ArrayList<>();
+
+            if(photoPaths == null){
+                photoPaths = new ArrayList<String>();
+            }
+
+            photoPaths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
+
+            ViewPagerLocalAdapter adapter = new ViewPagerLocalAdapter(PostCreateActivity.this, photoPaths);
+            viewPager.setAdapter(adapter);
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    Toast.makeText(PostCreateActivity.this, "FilePickerConst: Path: "+photoPaths.get(position), Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
         }
 
 
@@ -304,6 +342,8 @@ public class PostCreateActivity extends AppCompatActivity {
 
         Log.d(TAG, "btnUpload: Features Ids: "+multiSelectSpinnerFeatures.getSelectedIdsAsString());
         Log.d(TAG, "btnUpload: Features Ids: ArrayList: "+multiSelectSpinnerFeatures.getSelectedIdsAsArray());
+
+        Log.d(TAG,"btnUpload: Images array: "+photoPaths);
 
     }
 }
