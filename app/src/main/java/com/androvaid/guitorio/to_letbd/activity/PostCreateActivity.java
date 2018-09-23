@@ -2,11 +2,15 @@ package com.androvaid.guitorio.to_letbd.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androvaid.guitorio.to_letbd.R;
@@ -16,6 +20,8 @@ import com.androvaid.guitorio.to_letbd.model.categories.Categories;
 import com.androvaid.guitorio.to_letbd.model.categories.CategoriesResponse;
 import com.androvaid.guitorio.to_letbd.model.features.Features;
 import com.androvaid.guitorio.to_letbd.model.features.FeaturesResponse;
+import com.androvaid.guitorio.to_letbd.model.postcreate.PostCreateResponse;
+import com.androvaid.guitorio.to_letbd.utils.FileUtils;
 import com.androvaid.guitorio.to_letbd.widget.MultiSelectSpinner;
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -24,6 +30,8 @@ import com.scrat.app.selectorlibrary.ImageSelector;
 import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
 import com.zfdang.multiple_images_selector.SelectorSettings;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import droidninja.filepicker.FilePickerConst;
 
 import java.io.File;
@@ -31,8 +39,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +53,26 @@ import retrofit2.Response;
 public class PostCreateActivity extends AppCompatActivity {
 
     private static final String TAG = "PostCreateActivity";
+
+    private String Accept = "application/json";
+    private String Authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjgzYWVmNDY5NjUxMTA2YWQzZDUxNTVmNjBhNjU4YjM0OWI2MWFjYjk0ZDRlNjhjOGQzZGQ4ZGY0ZTk0MzBhNjRjOWU4YjI0MTU4YTk5ZTMyIn0.eyJhdWQiOiIxIiwianRpIjoiODNhZWY0Njk2NTExMDZhZDNkNTE1NWY2MGE2NThiMzQ5YjYxYWNiOTRkNGU2OGM4ZDNkZDhkZjRlOTQzMGE2NGM5ZThiMjQxNThhOTllMzIiLCJpYXQiOjE1MzY1MTMwODIsIm5iZiI6MTUzNjUxMzA4MiwiZXhwIjoxNTY4MDQ5MDgyLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.rOrPiMXXhmpseGp51dflx2Mfn2ytz6Fhlhuc9ZM8teIoBr5gpLb-6guHPazgsrx4TJ1AoIaGij1OFSySJpwE8S8NsvkwdpR_CBgw86CZskbmQrAFRvtNPo7NArSEDhMWA7MVwVbK9WlNLald3hXiENIvIxJq3TmlBsZLdmUpzcOcL1PHcgK31OKWLIVCfMXJe6SATeXiNHV5jwyzNcEaxGjPOVIsxeM0iz0CRmiJ7VxBHtnCfq6i86z6zwzolKHLHcdvc_6Yec5J6t1qN8n4-AZP57ImaCUDvXm8EBTKq1fL6UAm6B78MtBhTpu0dzWwdHG9uaDcRBdDUhM3UzFoC01Zbv7R6wbNkekfTghGP2Obh5xUYBwACLJh5XyI31PCT4mKbl5faWVxGPAH2QZgWIy-phR0m47rHEDUOCvmGwXIjVZ7NTZw9mAAZzQ5Bq6I_NDqy_YyVL_-9lag92ifP8TPj1JBKzdnGaBPopdunWQXvFUTLICH0ebhA6DgK4QBF0irKOGqQSZNIn7qQkvnPxyZZGBp1T4IF9gTTFtJb7PInW29yVvgoSoT_DUaIePBYqbLiiq0xZ3I4tQAsT4PeFzLr48xvWt6yMXh0FhAkOCanLGhqRz6upSNA_SOpe8obTvfOhww49dLXrXwHE9E_cV2UVPZvtHjik6dP5XU_ag";
+
+    // Initializations
+
+    @BindView(R.id.tvPropertyTitle)
+    EditText tvPropertyTitle;
+    @BindView(R.id.etLocation)
+    EditText etLocation;
+    @BindView(R.id.tvProductPrice)
+    EditText tvProductPrice;
+    @BindView(R.id.etArea)
+    EditText etArea;
+    @BindView(R.id.etBed)
+    EditText etBed;
+    @BindView(R.id.etBath)
+    EditText etBath;
+    @BindView(R.id.etPropertyOverView)
+    EditText etPropertyOverView;
 
     private static final int REQUEST_CODE_SELECT_IMG = 1;
 
@@ -57,9 +90,9 @@ public class PostCreateActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
 
-    // Spn
+    // Spinner
 
-    private MultiSelectSpinner multiSelectSpinnerCategories,multiSelectSpinnerFeatures;
+    private MultiSelectSpinner multiSelectSpinnerCategories, multiSelectSpinnerFeatures;
 
     ProgressDialog progressDialog;
 
@@ -72,7 +105,6 @@ public class PostCreateActivity extends AppCompatActivity {
     private List<Categories> categories = new ArrayList<>();
     private List<String> categoryIds = new ArrayList<>();
     private List<String> categoryNames = new ArrayList<>();
-
 
 
     //@BindView(R.id.btnSelectImage) Button button;
@@ -97,10 +129,9 @@ public class PostCreateActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE);*/
 
         droidninja.filepicker.FilePickerBuilder.getInstance().setMaxCount(5)
-               .setSelectedFiles(photoPaths)
-               .setActivityTheme(R.style.LibAppTheme)
-               .pickPhoto(this);
-
+                .setSelectedFiles(photoPaths)
+                .setActivityTheme(R.style.LibAppTheme)
+                .pickPhoto(this);
 
 
     }
@@ -109,6 +140,7 @@ public class PostCreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_create);
+        ButterKnife.bind(this);
 
         Fresco.initialize(PostCreateActivity.this);
 
@@ -138,13 +170,13 @@ public class PostCreateActivity extends AppCompatActivity {
 
                 for (Categories category : categories) {
 
-                    Log.d(TAG, "onResponse: Categories getName: "+category.getName());
+                    Log.d(TAG, "onResponse: Categories getName: " + category.getName());
 
                     categoryIds.add(category.getId().toString());
                     categoryNames.add(category.getName());
                 }
 
-                multiSelectSpinnerCategories.setItems(categoryNames,categoryIds,"Select-Categories","Select Multiple Categories");
+                multiSelectSpinnerCategories.setItems(categoryNames, categoryIds, "Select-Categories", "Select Multiple Categories");
             }
 
             @Override
@@ -154,6 +186,7 @@ public class PostCreateActivity extends AppCompatActivity {
         });
 
     }
+
     private void getFeatures() {
 
         Log.d(TAG, "getFeatures: inside");
@@ -169,13 +202,13 @@ public class PostCreateActivity extends AppCompatActivity {
 
                 for (Features feature : features) {
 
-                    Log.d(TAG, "onResponse: Features getTitle: "+feature.getTitle());
+                    Log.d(TAG, "onResponse: Features getTitle: " + feature.getTitle());
 
                     featureIds.add(feature.getId().toString());
                     featureTitles.add(feature.getTitle());
                 }
 
-                multiSelectSpinnerFeatures.setItems(featureTitles, featureIds, "Select Features","Select Multiple Features");
+                multiSelectSpinnerFeatures.setItems(featureTitles, featureIds, "Select Features", "Select Multiple Features");
 
             }
 
@@ -186,7 +219,6 @@ public class PostCreateActivity extends AppCompatActivity {
         });
 
     }
-
 
 
     private void initView() {
@@ -211,8 +243,8 @@ public class PostCreateActivity extends AppCompatActivity {
             Log.d("imgSelector", "paths: " + yourSelectImgPaths);
 
             /*
-            * ----------- base64 ------------
-            * */
+             * ----------- base64 ------------
+             * */
             for (String yourSelectImgPath : yourSelectImgPaths) {
                 try {
                     String encodedImage = ImageBase64
@@ -222,7 +254,7 @@ public class PostCreateActivity extends AppCompatActivity {
 
                     imagesBase64.add(encodedImage);
 
-                    Log.d(TAG, "onActivityResult: Image Path: "+yourSelectImgPath+" Encoded To Base64: "+encodedImage);
+                    Log.d(TAG, "onActivityResult: Image Path: " + yourSelectImgPath + " Encoded To Base64: " + encodedImage);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -244,7 +276,7 @@ public class PostCreateActivity extends AppCompatActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    Toast.makeText(PostCreateActivity.this, "Path: "+yourSelectImgPaths.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostCreateActivity.this, "Path: " + yourSelectImgPaths.get(position), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -254,7 +286,7 @@ public class PostCreateActivity extends AppCompatActivity {
             });
 
             return;
-        }else if(requestCode == REQUEST_CODE){
+        } else if (requestCode == REQUEST_CODE) {
 
             mResults = data.getStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS);
             assert mResults != null;
@@ -285,7 +317,7 @@ public class PostCreateActivity extends AppCompatActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    Toast.makeText(PostCreateActivity.this, "Path: "+mResults.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostCreateActivity.this, "Path: " + mResults.get(position), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -295,11 +327,11 @@ public class PostCreateActivity extends AppCompatActivity {
             });
 
 
-        }else if(FilePickerConst.REQUEST_CODE_PHOTO==233){
+        } else if (FilePickerConst.REQUEST_CODE_PHOTO == 233) {
 
             //photoPaths = new ArrayList<>();
 
-            if(photoPaths == null){
+            if (photoPaths == null) {
                 photoPaths = new ArrayList<String>();
             }
 
@@ -316,7 +348,7 @@ public class PostCreateActivity extends AppCompatActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    Toast.makeText(PostCreateActivity.this, "FilePickerConst: Path: "+photoPaths.get(position), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostCreateActivity.this, "FilePickerConst: Path: " + photoPaths.get(position), Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -333,17 +365,101 @@ public class PostCreateActivity extends AppCompatActivity {
 
     public void btnUpload(View view) {
 
-        Log.d(TAG, "btnUpload: Categori Ids: "+multiSelectSpinnerCategories.getSelectedIdsAsString());
+        progressDialog.show();
 
-        String[] array = multiSelectSpinnerCategories.getSelectedIdsAsArray().toArray(new String[multiSelectSpinnerCategories.getSelectedIdsAsArray().size()]);
-        Log.d(TAG, "btnUpload: Categori Ids Array: "+ Arrays.toString(array));
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", Accept);
+        headers.put("Authorization", Authorization);
 
-        Log.d(TAG, "btnUpload: Categori Ids List:"+multiSelectSpinnerCategories.getSelectedIdsAsArray());
+        ArrayList<Integer> categories = multiSelectSpinnerCategories.getSelectedIdsAsArray();
+        ArrayList<Integer> features = multiSelectSpinnerFeatures.getSelectedIdsAsArray();
 
-        Log.d(TAG, "btnUpload: Features Ids: "+multiSelectSpinnerFeatures.getSelectedIdsAsString());
-        Log.d(TAG, "btnUpload: Features Ids: ArrayList: "+multiSelectSpinnerFeatures.getSelectedIdsAsArray());
+        Log.d(TAG, "btnUpload: Categori Ids Array:" + categories);
+        Log.d(TAG, "btnUpload: Features Ids: Array: " + features);
 
-        Log.d(TAG,"btnUpload: Images array: "+photoPaths);
+        /*
+        * ----- images -------
+        * */
+        Log.d(TAG, "btnUpload: Images array: " + photoPaths);
+
+        /*List<MultipartBody.Part> parts = new ArrayList<>();
+        for (String photoPath : photoPaths) {
+            parts.add(prepareFilePart("images",Uri.parse(photoPath)));
+        }*/
+
+        /*
+        * -------- images -------
+        * */
+
+        //String title = tvPropertyTitle.getText().toString();
+        RequestBody title = RequestBody.create(MultipartBody.FORM, tvPropertyTitle.getText().toString());
+        RequestBody location = RequestBody.create(MultipartBody.FORM, etLocation.getText().toString());
+        RequestBody latitude = RequestBody.create(MultipartBody.FORM, "23.782980");
+        RequestBody longitude = RequestBody.create(MultipartBody.FORM, "90.394330");
+        /*
+         * =========== for Featured image ===========
+         * */
+        File file = new File(photoPaths.get(0));
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part featuredImage = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+        /*
+         * =========== for Featured image ===========
+         * */
+        RequestBody condition = RequestBody.create(MultipartBody.FORM,"2");
+        RequestBody rent_amount = RequestBody.create(MultipartBody.FORM,tvProductPrice.getText().toString());
+        RequestBody is_negotiable = RequestBody.create(MultipartBody.FORM,"1");
+        RequestBody available_from = RequestBody.create(MultipartBody.FORM,"2018-10-20");
+
+        Call<PostCreateResponse> postCreateResponseCall = RetrofitClient.getInstance().getApi().getPostCreateResponse(
+                headers,
+                title,
+                location,
+                latitude,
+                longitude,
+                featuredImage,
+                condition,
+                rent_amount,
+                is_negotiable,
+                available_from,
+                categories,
+                //parts,
+                features
+        );
+        postCreateResponseCall.enqueue(new Callback<PostCreateResponse>() {
+            @Override
+            public void onResponse(Call<PostCreateResponse> call, Response<PostCreateResponse> response) {
+                progressDialog.dismiss();
+
+                Log.d(TAG, "onResponse: Meta: "+response.body().getMeta().getStatus());
+                Log.d(TAG, "onResponse: Response: "+response.body().getResponse().getMessage());
+
+            }
+
+            @Override
+            public void onFailure(Call<PostCreateResponse> call, Throwable t) {
+
+            }
+        });
+
 
     }
+
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+        // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+        // use the FileUtils to get the actual file by uri
+        File file = FileUtils.getFile(this, fileUri);
+
+        // create RequestBody instance from file
+        RequestBody requestFile =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"),
+                        //MediaType.parse(getContentResolver().getType(fileUri)),
+                        file
+                );
+
+        // MultipartBody.Part is used to send also the actual file name
+        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
+    }
+
 }

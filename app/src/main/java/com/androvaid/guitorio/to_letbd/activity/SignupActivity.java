@@ -118,67 +118,74 @@ public class SignupActivity extends AppCompatActivity {
         if (!validate()) {
             onSignupFailed();
             return;
-        }
-
-        _signupButton.setEnabled(false);
-
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
-
-        String name = _nameText.getText().toString();
-        //String address = _addressText.getText().toString();
-        String email = _emailText.getText().toString();
-        String mobile = _mobileText.getText().toString();
-        String password = _passwordText.getText().toString();
-        String reEnterPassword = _reEnterPasswordText.getText().toString();
-
-        // TODO: Implement your own signup logic here.
-
-        RequestBody namePart = RequestBody.create(MultipartBody.FORM, name);
-        RequestBody emailPart = RequestBody.create(MultipartBody.FORM, email);
-        RequestBody mobilePart = RequestBody.create(MultipartBody.FORM, mobile);
-        RequestBody passwordPart = RequestBody.create(MultipartBody.FORM, password);
+        } else {
 
 
-        Log.d(TAG, "signup: Image Url: "+imagePath);
+            _signupButton.setEnabled(false);
 
-        //pass it like this
-        File file = new File(imagePath);
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        // MultipartBody.Part is used to send also the actual file name
-        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+            final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Creating Account...");
+            progressDialog.show();
 
-        Call<SignUpResponse> call = RetrofitClient.getInstance().getApi().getSignUpResponse(emailPart, passwordPart, namePart, mobilePart, body);
+            String name = _nameText.getText().toString();
+            //String address = _addressText.getText().toString();
+            String email = _emailText.getText().toString();
+            String mobile = _mobileText.getText().toString();
+            String password = _passwordText.getText().toString();
+            String reEnterPassword = _reEnterPasswordText.getText().toString();
 
-        call.enqueue(new Callback<SignUpResponse>() {
-            @Override
-            public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
+            // TODO: Implement your own signup logic here.
 
-                progressDialog.dismiss();
+            RequestBody namePart = RequestBody.create(MultipartBody.FORM, name);
+            RequestBody emailPart = RequestBody.create(MultipartBody.FORM, email);
+            RequestBody mobilePart = RequestBody.create(MultipartBody.FORM, mobile);
+            RequestBody passwordPart = RequestBody.create(MultipartBody.FORM, password);
 
-                Log.d(TAG, "onResponse: meta: " + response.body().getMeta().getStatus());
 
-                if(response.body().getMeta().getStatus()==200){
+            Log.d(TAG, "signup: Image Url: " + imagePath);
 
-                    Toast.makeText(SignupActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
+            /*
+            * =========== for single image ===========
+            * */
 
-                    finish();
-                    overridePendingTransition( 0, 0);
-                    startActivity(getIntent());
-                    overridePendingTransition( 0, 0);
+
+            File file = new File(imagePath);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
+            /*
+             * =========== for single image ===========
+             * */
+
+            Call<SignUpResponse> call = RetrofitClient.getInstance().getApi().getSignUpResponse(emailPart, passwordPart, namePart, mobilePart, body);
+
+            call.enqueue(new Callback<SignUpResponse>() {
+                @Override
+                public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
+
+                    progressDialog.dismiss();
+
+                    Log.d(TAG, "onResponse: meta: " + response.body().getMeta().getStatus());
+
+                    if (response.body().getMeta().getStatus() == 200) {
+
+                        Toast.makeText(SignupActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
+
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
+                    }
+
+
                 }
 
+                @Override
+                public void onFailure(Call<SignUpResponse> call, Throwable t) {
 
-            }
-
-            @Override
-            public void onFailure(Call<SignUpResponse> call, Throwable t) {
-
-            }
-        });
+                }
+            });
 
         /*new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -190,6 +197,7 @@ public class SignupActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 }, 3000);*/
+        }
     }
 
 
@@ -221,13 +229,6 @@ public class SignupActivity extends AppCompatActivity {
         } else {
             _nameText.setError(null);
         }
-
-        /*if (address.isEmpty()) {
-            _addressText.setError("Enter Valid Address");
-            valid = false;
-        } else {
-            _addressText.setError(null);
-        }*/
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError("enter a valid email address");

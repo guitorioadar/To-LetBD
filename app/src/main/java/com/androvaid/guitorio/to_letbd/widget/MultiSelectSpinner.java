@@ -16,6 +16,7 @@ import android.widget.SpinnerAdapter;
 
 import com.androvaid.guitorio.to_letbd.R;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class MultiSelectSpinner extends Spinner implements DialogInterface.OnMul
     private boolean[] selectedValues; // Stores selected values
     private boolean[] selectionAtStart; // Original selected values
     private Context context;
+
+    private ArrayList<Integer> selectedIDs = new ArrayList<>();
+    private ArrayList<String> selectedVals = new ArrayList<>();
 
     public MultiSelectSpinner(Context context) {
         super(context);
@@ -159,6 +163,8 @@ public class MultiSelectSpinner extends Spinner implements DialogInterface.OnMul
                 }
                 isFirst = true;
                 sb.append(items.get(i));
+
+
             }
         }
         if (sb.length() == 0) {
@@ -181,6 +187,9 @@ public class MultiSelectSpinner extends Spinner implements DialogInterface.OnMul
                 }
                 isFirst = true;
                 sb.append(ids.get(i));
+
+                selectedIDs.add(Integer.parseInt(ids.get(i)));
+
             }
         }
         if (sb.length() == 0) {
@@ -189,7 +198,13 @@ public class MultiSelectSpinner extends Spinner implements DialogInterface.OnMul
         return sb.toString();
     }
 
-    public List<String> getSelectedIdsAsArray(){
-        return ids;
+
+
+    public ArrayList<Integer> getSelectedIdsAsArray(){
+
+        getSelectedIdsAsString();
+
+        return selectedIDs;
+        //return ids;
     }
 }

@@ -98,13 +98,14 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/etLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:padding="12dp"
                         android:hint="@string/recent_news"
-                        android:textColorHint="@color/gray"
+                        android:padding="12dp"
                         android:textColor="@color/colorPrimaryText"
+                        android:textColorHint="@color/gray"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -153,11 +154,12 @@
                             android:text="Area: (sft) " />
 
                         <EditText
+                            android:id="@+id/etArea"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="1200"
-                            android:textColorHint="@color/gray"
-                            android:inputType="number"/>
+                            android:inputType="number"
+                            android:textColorHint="@color/gray" />
 
                         <View
                             android:layout_width="1dp"
@@ -172,11 +174,12 @@
                             android:text="Bed: " />
 
                         <EditText
+                            android:id="@+id/etBed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="2/3"
-                            android:textColorHint="@color/gray"
-                            android:inputType="number"/>
+                            android:inputType="number"
+                            android:textColorHint="@color/gray" />
 
                         <View
                             android:layout_width="1dp"
@@ -191,11 +194,12 @@
                             android:text="Bath: " />
 
                         <EditText
+                            android:id="@+id/etBath"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:hint="1/2"
-                            android:textColorHint="@color/gray"
-                            android:inputType="number"/>
+                            android:inputType="number"
+                            android:textColorHint="@color/gray" />
 
 
                     </LinearLayout>
@@ -248,13 +252,14 @@
                         android:textStyle="bold" />
 
                     <EditText
+                        android:id="@+id/etPropertyOverView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:hint="@string/in_news"
                         android:lineSpacingMultiplier="1.2"
                         android:padding="12dp"
-                        android:hint="@string/in_news"
-                        android:textColorHint="@color/gray"
                         android:textAlignment="center"
+                        android:textColorHint="@color/gray"
                         android:textSize="14sp" />
 
                     <LinearLayout

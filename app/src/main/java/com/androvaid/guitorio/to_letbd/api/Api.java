@@ -8,7 +8,9 @@ import com.androvaid.guitorio.to_letbd.model.postsdetail.PostsDetailResponse;
 import com.androvaid.guitorio.to_letbd.model.signin.SignInResponse;
 import com.androvaid.guitorio.to_letbd.model.signup.SignUpResponse;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.androvaid.guitorio.to_letbd.model.postcreate.PostCreateResponse;
 
@@ -19,6 +21,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -80,6 +83,7 @@ public interface Api {
 
             // Referance: https://stackoverflow.com/questions/39866676/retrofit-uploading-multiple-images-to-a-single-key
 
+            @HeaderMap Map<String, String> headers,
             @Part("title") RequestBody title,
             @Part("location") RequestBody location,
             @Part("latitude") RequestBody latitude,
@@ -89,10 +93,11 @@ public interface Api {
             @Part("rent_amount") RequestBody rent_amount,
             @Part("is_negotiable") RequestBody is_negotiable,
             @Part("available_from") RequestBody available_from,
-            @Part("categories[]") List<Integer> categories,
+            @Part("categories") List<Integer> categories,
             //@Part MultipartBody.Part[] images,
-            @Part List<MultipartBody.Part> file,
-            @Part("features[]") List<Integer> features
+            //@Part List<MultipartBody.Part> images,
+            //@Part MultipartBody.Part[] file,
+            @Part("features") List<Integer> features
 
     );
 
