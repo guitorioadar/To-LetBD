@@ -45,6 +45,17 @@
                     android:src="@drawable/lake"
                     app:layout_collapseMode="parallax" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="First Photo Will be the Featured Photo"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="left"
+                    android:paddingLeft="10dp"
+                    android:textSize="10sp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/bottom_two_round"/>
+
 
             </RelativeLayout>
 

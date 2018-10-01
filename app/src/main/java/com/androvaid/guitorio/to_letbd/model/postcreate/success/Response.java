@@ -1,10 +1,8 @@
 
-package com.androvaid.guitorio.to_letbd.model.postcreate;
+package com.androvaid.guitorio.to_letbd.model.postcreate.success;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 public class Response {
 
@@ -14,7 +12,6 @@ public class Response {
     @SerializedName("post")
     @Expose
     private Post post;
-
 
     /**
      * No args constructor for use in serialization
@@ -49,7 +46,5 @@ public class Response {
     public void setPost(Post post) {
         this.post = post;
     }
-
-
 
 }

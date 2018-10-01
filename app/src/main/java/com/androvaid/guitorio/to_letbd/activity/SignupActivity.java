@@ -1,28 +1,34 @@
 package com.androvaid.guitorio.to_letbd.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androvaid.guitorio.to_letbd.R;
 import com.androvaid.guitorio.to_letbd.api.RetrofitClient;
 import com.androvaid.guitorio.to_letbd.model.signup.SignUpResponse;
-import com.androvaid.guitorio.to_letbd.utils.FileUtils;
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 import com.zfdang.multiple_images_selector.ImagesSelectorActivity;
 import com.zfdang.multiple_images_selector.SelectorSettings;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -115,18 +121,18 @@ public class SignupActivity extends AppCompatActivity {
     public void signup() {
         Log.d(TAG, "Signup");
 
-        if (!validate()) {
+        if (validate()) {
             onSignupFailed();
             return;
         } else {
 
 
-            _signupButton.setEnabled(false);
+            _signupButton.setEnabled(true);
 
-            final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,R.style.AppTheme_Dark_Dialog);
+            final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this, R.style.AppTheme_Dark_Dialog);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Creating Account...");
-            progressDialog.show();
+
 
             String name = _nameText.getText().toString();
             //String address = _addressText.getText().toString();
@@ -137,69 +143,89 @@ public class SignupActivity extends AppCompatActivity {
 
             // TODO: Implement your own signup logic here.
 
-            RequestBody namePart = RequestBody.create(MultipartBody.FORM, name);
+            /*RequestBody namePart = RequestBody.create(MultipartBody.FORM, name);
             RequestBody emailPart = RequestBody.create(MultipartBody.FORM, email);
             RequestBody mobilePart = RequestBody.create(MultipartBody.FORM, mobile);
-            RequestBody passwordPart = RequestBody.create(MultipartBody.FORM, password);
+            RequestBody passwordPart = RequestBody.create(MultipartBody.FORM, password);*/
+
+
 
 
             Log.d(TAG, "signup: Image Url: " + imagePath);
 
             /*
-            * =========== for single image ===========
-            * */
-
-
-            File file = new File(imagePath);
-            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-
-            /*
              * =========== for single image ===========
              * */
 
-            Call<SignUpResponse> call = RetrofitClient.getInstance().getApi().getSignUpResponse(emailPart, passwordPart, namePart, mobilePart, body);
-
-            call.enqueue(new Callback<SignUpResponse>() {
-                @Override
-                public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
-
-                    progressDialog.dismiss();
-
-                    Log.d(TAG, "onResponse: meta: " + response.body().getMeta().getStatus());
-
-                    if (response.body().getMeta().getStatus() == 200) {
-
-                        Toast.makeText(SignupActivity.this, "Successfully Registered", Toast.LENGTH_SHORT).show();
-
-                        finish();
-                        overridePendingTransition(0, 0);
-                        startActivity(getIntent());
-                        overridePendingTransition(0, 0);
-                    }
 
 
-                }
+            String filepath = imagePath;
+            //String filepath = "/storage/0403-0201/DCIM/Camera/20180926_203219.jpg";
+            File file = new File(filepath);
+            if (file.exists()) {
 
-                @Override
-                public void onFailure(Call<SignUpResponse> call, Throwable t) {
+                Toast.makeText(this, "File: name: "+file.getName(), Toast.LENGTH_SHORT).show();
 
-                }
-            });
+                /*Picasso.get()
+                        .load(new File(filepath))
+                        .into(profileImage);*/
 
-        /*new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
+                progressDialog.show();
+                Log.d(TAG, "signup: path: " + filepath);
+
+                /*
+                 * =========== for single image ===========
+                 * */
+                RequestBody namePart = RequestBody.create(MultipartBody.FORM, "nameasd");
+                RequestBody emailPart = RequestBody.create(MultipartBody.FORM, "emailasd@gmai.com");
+                RequestBody mobilePart = RequestBody.create(MultipartBody.FORM, "123456623");
+                RequestBody passwordPart = RequestBody.create(MultipartBody.FORM, "123456123");
+                //String filepath = "/storage/0403-0201/DCIM/Camera/20180926_203219.jpg"; this is the image source
+
+                Log.d(TAG, "signup: file size: "+file.length() +" name" +file.getName());
+
+                RequestBody reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
+
+                /*Call<SignUpResponse> call = RetrofitClient.getInstance().getApi().getSignUpResponse(emailPart, passwordPart, namePart, mobilePart, body);
+                call.enqueue(new Callback<SignUpResponse>() {
+                    @Override
+                    public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response) {
                         progressDialog.dismiss();
+
+                        Log.d(TAG, "onResponse: call: "+call.toString());
+
+                        Log.d(TAG, "onResponse: "+response.body());
+                        //Log.d(TAG, "onResponse: meta: " + response.body().getMeta().getStatus());
                     }
-                }, 3000);*/
+                    @Override
+                    public void onFailure(Call<SignUpResponse> call, Throwable t) {
+                        Toast.makeText(SignupActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onFailure: "+t.getMessage());
+                    }
+                });*/
+            } else {
+                Toast.makeText(this, "Select Image or file does not exists", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
+    private String getRealPathFromURIPath(Uri contentURI,Activity activity){
+
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this, contentURI, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = 0;
+        if (cursor != null) {
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        }
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+
+    }
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
@@ -266,7 +292,17 @@ public class SignupActivity extends AppCompatActivity {
         // get selected images from selector
         if (requestCode == REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
+
+                Uri uri = data.getData();
+                imagePath = getRealPathFromURIPath(uri,SignupActivity.this);
+
+
                 mResults = data.getStringArrayListExtra(SelectorSettings.SELECTOR_RESULTS);
+                //imagePath = mResults.get(0);
+                Glide.with(SignupActivity.this)
+                        .load(mResults.get(0))
+                        .into(profileImage);
+
                 assert mResults != null;
 
                 // show results in textview
@@ -277,17 +313,6 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
                 Log.d(TAG, "onActivityResult: " + mResults);
-
-                //profileImage.setImageURI(mResults);
-
-                //profileImage.setImageURI(mResults.get(0));
-
-                imagePath = mResults.get(0);
-
-                Glide.with(SignupActivity.this)
-                        .load(mResults.get(0))
-                        .into(profileImage);
-                //tvResults.setText(sb.toString());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

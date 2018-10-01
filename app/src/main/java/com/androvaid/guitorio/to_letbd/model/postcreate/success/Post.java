@@ -1,5 +1,5 @@
 
-package com.androvaid.guitorio.to_letbd.model.postcreate;
+package com.androvaid.guitorio.to_letbd.model.postcreate.success;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
