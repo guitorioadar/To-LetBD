@@ -184,9 +184,6 @@ public class PropertyList extends AppCompatActivity {
                 try {
                     posts = response.body().getPosts();
 
-                    /*Posts[] array = new Posts[posts.size()];
-                    posts.toArray(array);*/
-
                     toLetItemRecyclerView.setAdapter(new PostRecyclerViewAdapter(PropertyList.this,posts.toArray(new Posts[posts.size()])));
 
                 }catch (Exception e){

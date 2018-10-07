@@ -5,6 +5,8 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -42,6 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import droidninja.filepicker.FilePickerConst;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -145,6 +148,8 @@ public class PostCreateActivity extends AppCompatActivity {
         intent.putStringArrayListExtra(SelectorSettings.SELECTOR_INITIAL_SELECTED_LIST, mResults);
         // start the selector
         startActivityForResult(intent, REQUEST_CODE);*/
+
+        photoPaths.clear();
 
         droidninja.filepicker.FilePickerBuilder.getInstance().setMaxCount(5)
                 .setSelectedFiles(photoPaths)
@@ -398,17 +403,17 @@ public class PostCreateActivity extends AppCompatActivity {
 
 
         /*
-         * -------------- okHttp post Create single featured Image Working with MultipartBody -----------
+         * -------------- Retrofit post Create single featured Image Working with MultipartBody -----------
          * */
 
         progressDialog.show();
 
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
-        builder.addFormDataPart("title", "3 room Khawon Free")
+        builder.addFormDataPart("title", "3 room Current Free")
                 .addFormDataPart("location", "Dhaka")
-                .addFormDataPart("latitude", "23.7615")
-                .addFormDataPart("longitude", "90.3525")
+                .addFormDataPart("latitude", "23.7515")
+                .addFormDataPart("longitude", "90.3625")
                 .addFormDataPart("condition", "1")
                 .addFormDataPart("rent_amount", "123456")
                 .addFormDataPart("is_negotiable", "0")
@@ -427,6 +432,12 @@ public class PostCreateActivity extends AppCompatActivity {
         if (photoPaths.get(0) != null) {
             File featured_image = new File(photoPaths.get(0));
             if (featured_image.exists()) {
+
+                /*Bitmap bmp = BitmapFactory.decodeFile(featured_image.getAbsolutePath());
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 30, bos);*/
+
+                //builder.addFormDataPart("featured_photo", featured_image.getName(), RequestBody.create(MultipartBody.FORM, bos.toByteArray()));
                 builder.addFormDataPart("featured_photo", featured_image.getName(), RequestBody.create(MultipartBody.FORM, featured_image));
             }
         }
@@ -448,7 +459,6 @@ public class PostCreateActivity extends AppCompatActivity {
             public void onResponse(Call<PostCreateResponse> call, Response<PostCreateResponse> response) {
                 progressDialog.dismiss();
                 Log.d(TAG, "onResponse: response code: retrofit: " + response.code());
-                //Toast.makeText(PostCreateActivity.this, "Post Id: " + response.body().getResponse().getPost().getId() + " " + response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -458,7 +468,7 @@ public class PostCreateActivity extends AppCompatActivity {
         });
 
         /*
-         * ---------------- okHttp post Create single featured Image Working with MultipartBody----------------
+         * ---------------- Retrofit post Create single featured Image Working with MultipartBody----------------
          * */
 
         String featuredImagePath = getRealPathFromUri(Uri.parse(photoPaths.get(0)));

@@ -10,139 +10,102 @@
     <LinearLayout
         android:id="@+id/linearLayoutPropertyFilter"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="Sort By:"
-            android:visibility="gone" />
-
-        <!--<Spinner
-            android:id="@+id/spnSortBy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />-->
-
-        <!--<fr.ganfra.materialspinner.MaterialSpinner
-            android:id="@+id/spnSortBy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:ms_arrowColor="#0000FF"
-            app:ms_arrowSize="16dp"
-            app:ms_floatingLabelColor="#00FF00"
-            app:ms_floatingLabelText="floating label"
-            app:ms_hint="hint"
-            app:ms_multiline="true" />-->
-
-        <fr.ganfra.materialspinner.MaterialSpinner
-            android:id="@+id/spnSortBy"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            app:ms_alignLabels="false"
-            app:ms_arrowColor="@color/google_red"
-            app:ms_arrowSize="16dp"
-            app:ms_baseColor="@color/spinner_base_color"
-            app:ms_dropDownHintView="@layout/my_custom_dropdown_hint_item_layout"
-            app:ms_enableErrorLabel="false"
-            app:ms_enableFloatingLabel="false"
-            app:ms_errorColor="@color/google_red"
-            app:ms_floatingLabelColor="#01c201"
-            app:ms_floatingLabelText="floating label"
-            app:ms_hint="Sort"
-            app:ms_hintColor="@color/google_red"
-            app:ms_multiline="false"
-            app:ms_thickness="0.2dp" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="Categories:"
-            android:visibility="gone" />
-
-        <!--<Spinner
-            android:id="@+id/spnCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />-->
-
-        <!--<fr.ganfra.materialspinner.MaterialSpinner
-            android:id="@+id/spnCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:ms_arrowColor="#0000FF"
-            app:ms_arrowSize="16dp"
-            app:ms_floatingLabelColor="#00FF00"
-            app:ms_floatingLabelText="floating label"
-            app:ms_hint="hint"
-            app:ms_multiline="true" />-->
-
-        <fr.ganfra.materialspinner.MaterialSpinner
-            android:id="@+id/spnCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            app:ms_alignLabels="false"
-            app:ms_arrowColor="@color/google_red"
-            app:ms_arrowSize="16dp"
-            app:ms_baseColor="@color/spinner_base_color"
-            app:ms_dropDownHintView="@layout/my_custom_dropdown_hint_item_layout"
-            app:ms_enableErrorLabel="false"
-            app:ms_enableFloatingLabel="false"
-            app:ms_errorColor="@color/google_red"
-            app:ms_floatingLabelColor="#01c201"
-            app:ms_floatingLabelText="floating label"
-            app:ms_hint="Categories"
-            app:ms_hintColor="@color/google_red"
-            app:ms_multiline="false"
-            app:ms_thickness="0.2dp" />
-
-        <ImageButton
-            android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_search"
-            android:onClick="btnSearchClickEvent"/>
-
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/toLetItemRecyclerView"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPropertyFilter"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+
+            <fr.ganfra.materialspinner.MaterialSpinner
+                android:id="@+id/spnSortBy"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                app:ms_alignLabels="false"
+                app:ms_arrowColor="@color/google_red"
+                app:ms_arrowSize="16dp"
+                app:ms_baseColor="@color/spinner_base_color"
+                app:ms_dropDownHintView="@layout/my_custom_dropdown_hint_item_layout"
+                app:ms_enableErrorLabel="false"
+                app:ms_enableFloatingLabel="false"
+                app:ms_errorColor="@color/google_red"
+                app:ms_floatingLabelColor="#01c201"
+                app:ms_floatingLabelText="floating label"
+                app:ms_hint="Sort"
+                app:ms_hintColor="@color/google_red"
+                app:ms_multiline="false"
+                app:ms_thickness="0.2dp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:text="Categories:"
+                android:visibility="gone" />
+
+            <fr.ganfra.materialspinner.MaterialSpinner
+                android:id="@+id/spnCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                app:ms_alignLabels="false"
+                app:ms_arrowColor="@color/google_red"
+                app:ms_arrowSize="16dp"
+                app:ms_baseColor="@color/spinner_base_color"
+                app:ms_dropDownHintView="@layout/my_custom_dropdown_hint_item_layout"
+                app:ms_enableErrorLabel="false"
+                app:ms_enableFloatingLabel="false"
+                app:ms_errorColor="@color/google_red"
+                app:ms_floatingLabelColor="#01c201"
+                app:ms_floatingLabelText="floating label"
+                app:ms_hint="Categories"
+                app:ms_hintColor="@color/google_red"
+                app:ms_multiline="false"
+                app:ms_thickness="0.2dp" />
+
+            <ImageButton
+                android:id="@+id/btnSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="btnSearchClickEvent"
+                android:src="@drawable/img_search"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/toLetItemRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutPropertyFilter"
+            app:layout_constraintVertical_bias="0.0">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
 
 </android.support.constraint.ConstraintLayout>
