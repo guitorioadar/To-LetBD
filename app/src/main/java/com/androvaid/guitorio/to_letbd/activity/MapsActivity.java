@@ -55,8 +55,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
 
-
-
     }
 
 

@@ -3,6 +3,7 @@ package com.androvaid.guitorio.to_letbd.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,7 +45,11 @@ import com.akexorcist.googledirection.model.Direction;
 import com.androvaid.guitorio.to_letbd.R;
 import com.androvaid.guitorio.to_letbd.adapter.CustomInfoWindowAdapter;
 import com.androvaid.guitorio.to_letbd.adapter.PlaceAutocompleteAdapter;
+import com.androvaid.guitorio.to_letbd.api.RetrofitClient;
 import com.androvaid.guitorio.to_letbd.model.PlaceInfo;
+import com.androvaid.guitorio.to_letbd.model.posts.Posts;
+import com.androvaid.guitorio.to_letbd.model.posts.PostsResponse;
+import com.androvaid.guitorio.to_letbd.model.postsdetail.PostsDetailResponse;
 import com.androvaid.guitorio.to_letbd.utils.Utility;
 import com.androvaid.guitorio.to_letbd.utils.UtilityInterfaces;
 import com.directions.route.AbstractRouting;
@@ -68,6 +73,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -83,6 +89,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.androvaid.guitorio.to_letbd.utils.Utility.mLocationPermissionGranted;
 import static com.github.florent37.runtimepermission.RuntimePermission.askPermission;
 
@@ -91,7 +101,7 @@ import static com.github.florent37.runtimepermission.RuntimePermission.askPermis
 * ================== Created By Vaidoos =================
 * */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, UtilityInterfaces, RoutingListener,  GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback, UtilityInterfaces, RoutingListener,  GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener  {
 
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
@@ -114,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private PlaceInfo mPlace;
 
+    private List<Posts> posts = new ArrayList<>();
+
     private List<Polyline> polylines;
 
     private Location currentLocation;
@@ -122,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //private static final LatLngBounds BOUNDS_JAMAICA= new LatLngBounds(new LatLng(-57.965341647205726, 144.9987719580531), new LatLng(72.77492067739843, -9.998857788741589));
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(new LatLng(-40, -168), new LatLng(71, 136));
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -131,11 +144,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+
         /*
          * ================ Map Fragment =============
          * */
-
-
 
         polylines = new ArrayList<>();
 
@@ -229,12 +243,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-
-
-    /*
-     * ======================= OnCreate Ends ==============================
-     * */
 
     @Override
     public void onBackPressed() {
@@ -367,14 +375,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            
-            init();
+
+            // initialize map
+            init(); // *** Important
+
+            // Retrive all posts
+            progressDialog.show();
+            Call<PostsResponse> call = RetrofitClient.getInstance().getApi().getPosts();
+            call.enqueue(new Callback<PostsResponse>() {
+                @Override
+                public void onResponse(Call<PostsResponse> call, Response<PostsResponse> response) {
+                    progressDialog.dismiss();
+                    if(response.code()==200){
+                        posts = response.body().getPosts();
+
+                        Drawable circleDrawable = getResources().getDrawable(R.drawable.ic_buildings_24dp);
+                        BitmapDescriptor markerIcon = getMarkerIconFromDrawable(circleDrawable);
+
+                        for (Posts post : posts) {
+
+                            Log.d(TAG, "onMapReady: each posts: "+post);
+
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(Double.valueOf(post.getLatitude()),Double.valueOf(post.getLongitude())))
+                                    .title(post.getTitle())
+                                    .snippet(String.valueOf(post.getId()))
+                                    .icon(markerIcon)
+                            );
+                        }
+
+                    }else {
+                        Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<PostsResponse> call, Throwable t) {
+                    progressDialog.dismiss();
+                    Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
-            /*
-             * ============ Draw Route ============
-             * */
-            drawRoute();
+
+            //drawRoute();
 
 
         }
@@ -758,5 +801,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Log.d(TAG, "onMarkerClick: Marker clicked");
+        
+        marker.showInfoWindow();
+
+
+        Log.d(TAG, "onMarkerClick: Marker: "
+                +" Id: "+marker.getId()
+                +" Snippet: "+marker.getSnippet()
+                +" Title: "+marker.getTitle()
+        );
+
+        progressDialog.show();
+        Call<PostsDetailResponse> call = RetrofitClient.getInstance().getApi().getPostDetailResponse(marker.getSnippet());
+        call.enqueue(new Callback<PostsDetailResponse>() {
+            @Override
+            public void onResponse(Call<PostsDetailResponse> call, Response<PostsDetailResponse> response) {
+                progressDialog.dismiss();
+
+                if(response.code()==200){
+                    Log.d(TAG, "onResponse: Each Response: "+response.body().toString());
+                }else {
+                    Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<PostsDetailResponse> call, Throwable t) {
+
+            }
+        });
+
+        return false;
+    }
+
+    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
+        Canvas canvas = new Canvas();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
 }
 
